@@ -13,7 +13,7 @@ export const profile = {
   phone: "(314) 292-9809",
   linkedin: "https://www.linkedin.com/in/sivamotamarri/",
   linkedinLabel: "linkedin.com/in/sivamotamarri",
-  resume: "/Siva-Motamarri-Resume.pdf",
+  resume: "Siva-Motamarri-Resume.pdf",
   /** one label per intent, used everywhere */
   contactCta: "Get in touch",
   headline:
