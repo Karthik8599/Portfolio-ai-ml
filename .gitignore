@@ -1,0 +1,23 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+.env
+.env.*
+!.env.example
+
+# Claude Code tooling (agent config, vendored skills, MCP config) --
+# not part of the site, kept out of the public repo
+.claude/
+.agents/
+.mcp.json
+skills-lock.json
+
+# Original source documents (resume/profile exports, photo) -- not
+# referenced by the site; the public copy the site links to lives at
+# public/Siva-Motamarri-Resume.pdf
+/Profile.pdf
+/Siva Motamarri.pdf
+/my picture.png

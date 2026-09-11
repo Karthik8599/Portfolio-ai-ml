@@ -1,0 +1,34 @@
+.footer {
+  border-top: 1px solid var(--line);
+  padding-block: 40px;
+  background: var(--bg-1);
+}
+
+.footer__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__name {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  letter-spacing: 0.02em;
+}
+
+.footer__links {
+  display: flex;
+  gap: 22px;
+  font-size: 0.86rem;
+}
+
+.footer__links a {
+  color: var(--text-dim);
+  transition: color 0.25s var(--ease);
+}
+
+.footer__links a:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,24 @@
+.about {
+  position: relative;
+  z-index: 2;
+  background: var(--bg);
+}
+
+.about__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  max-width: 62ch;
+}
+
+.about__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+}
+
+.about__summary {
+  max-width: 58ch;
+}

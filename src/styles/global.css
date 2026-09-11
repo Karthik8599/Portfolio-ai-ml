@@ -1,0 +1,301 @@
+/* ============================================================
+   Design tokens
+   Premium AI-engineer dark portfolio. Near-black charcoal base,
+   two restrained accents (electric blue = primary, violet =
+   secondary), minimal glass on a few surfaces, generous
+   whitespace, gradients used sparingly and only where they carry
+   meaning (primary CTA, one glow behind the hero). Inspired by
+   developer-product sites (Vercel, Linear) rather than dashboard
+   or agency-portfolio defaults.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+
+  --bg: #0a0a0d; /* near-black, faint cool tint, never pure #000 */
+  --bg-1: #0d0e12; /* alternating section */
+  --surface: #131318; /* solid card surface */
+  --surface-2: #17181e;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --text: #edeef2; /* off-white, never pure #fff */
+  --text-dim: #9a9dab;
+  --text-faint: #5c5f6e;
+
+  /* primary — nav, links, primary CTA, focus rings */
+  --accent: #5b8def;
+  --accent-hover: #7aa3f2;
+  --accent-ink: #06070a;
+  --accent-soft-bg: rgba(91, 141, 239, 0.12);
+  --accent-soft-ink: #8fb0f4;
+
+  /* secondary — used sparingly alongside primary */
+  --violet: #8b7cf6;
+  --violet-soft-bg: rgba(139, 124, 246, 0.12);
+  --violet-soft-ink: #b0a4f9;
+
+  /* glass: applied to a handful of surfaces only (nav, badge, cards) */
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-blur: 18px;
+
+  --maxw: 1220px;
+  --gutter: clamp(20px, 5vw, 72px);
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  --font-display: "Geist Variable", "Geist", system-ui, sans-serif;
+  --font-body: "Geist Variable", "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, Menlo, monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.5s;
+
+  --z-grain: 60;
+  --z-nav: 80;
+  --z-loader: 100;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  position: relative;
+  padding-block: clamp(110px, 17vh, 200px);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
+  max-width: 20ch;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.lead {
+  color: var(--text-dim);
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  max-width: 58ch;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.accent-word {
+  color: var(--accent);
+}
+
+.accent-word--violet {
+  color: var(--violet);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1;
+}
+
+/* reusable glass surface: subtle, applied deliberately not everywhere */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  --pad-y: 13px;
+  --pad-x: 20px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--pad-y) var(--pad-x);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.94rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), transform 0.2s var(--ease),
+    box-shadow var(--dur) var(--ease);
+  will-change: transform;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--accent), var(--violet));
+  color: #06070a;
+  box-shadow: 0 8px 26px -10px rgba(91, 141, 239, 0.45);
+}
+
+.btn--primary:hover {
+  box-shadow: 0 10px 32px -8px rgba(91, 141, 239, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent-soft-ink);
+}
+
+.btn__icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-right: -4px;
+  border-radius: 6px;
+  background: rgba(6, 7, 10, 0.16);
+  transition: transform 0.3s var(--ease);
+}
+
+.btn--ghost .btn__icon {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn:hover .btn__icon {
+  transform: translate(2px, -2px);
+}
+
+/* ============================================================
+   Chips / tags
+   ============================================================ */
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--accent-soft-ink);
+  background: var(--accent-soft-bg);
+  border: 1px solid rgba(91, 141, 239, 0.18);
+}
+
+/* ============================================================
+   Reveal + card entrance (GSAP-driven).
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready [data-reveal],
+  html.reveal-ready [data-card] {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  html.reveal-ready [data-reveal] {
+    transform: translateY(18px);
+  }
+  html.reveal-ready [data-card] {
+    transform: translateY(26px) scale(0.985);
+  }
+}
+
+/* ============================================================
+   Fixed film grain
+   ============================================================ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

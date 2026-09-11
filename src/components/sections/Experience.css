@@ -1,0 +1,100 @@
+.experience {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  padding-bottom: 0;
+}
+
+.exp-stack {
+  position: relative;
+}
+
+.exp-card {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  will-change: transform, opacity;
+}
+
+.exp-card__inner {
+  max-width: 900px;
+  padding-block: clamp(48px, 10vh, 96px);
+}
+
+.exp-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.exp-card__company {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  letter-spacing: -0.03em;
+}
+
+.exp-card__role {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.exp-card__period {
+  font-size: 0.8rem;
+  color: var(--violet);
+  letter-spacing: 0.02em;
+}
+
+.exp-card__summary {
+  margin-top: 24px;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  color: var(--text);
+  max-width: 54ch;
+  line-height: 1.5;
+}
+
+.exp-card__list {
+  margin-top: 26px;
+  display: grid;
+  gap: 14px;
+}
+
+.exp-card__list li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 68ch;
+}
+
+.exp-card__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 1px;
+  background: var(--violet);
+}
+
+.exp-card__stack {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-card {
+    min-height: 0;
+    padding-block: 8vh;
+  }
+}
