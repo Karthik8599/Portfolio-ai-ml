@@ -13,13 +13,24 @@ type Props = { onSceneReady: () => void };
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%$&*/<>";
 const LAST = "Motamarri";
 
-// The side-by-side split only has room above ~900px; below that the hero
-// stacks (compact graph panel on top, content below, see Hero.css), so
-// "tablet" and "mobile" both need the compact treatment, just at different
-// sizes within it.
+// The side-by-side split needs real width relative to height, not just a
+// wide viewport in isolation -- a phone in landscape is plenty wide but
+// very short, and an iPad in portrait is plenty wide but very *tall*
+// (1024x1366), and pushing the graph 3 world-units right on that narrow-
+// for-its-height a canvas shoves nearly the whole thing off-frame. So
+// "compact" (stacked) layout triggers on narrow width, short height, OR a
+// portrait-ish aspect ratio; width alone then just picks how big the graph
+// panel gets within that compact layout. This same classification also
+// drives a class on the section (see Hero.css) so the JS 3D positioning
+// and the CSS DOM layout can never disagree about which mode is active.
 function useViewportKind() {
-  const classify = () =>
-    window.innerWidth > 900 ? "desktop" : window.innerWidth > 640 ? "tablet" : "mobile";
+  const classify = (): "desktop" | "tablet" | "mobile" => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const tooShortOrTall = h <= 560 || w / h < 1.05;
+    if (w > 900 && !tooShortOrTall) return "desktop";
+    return w > 640 ? "tablet" : "mobile";
+  };
 
   const [kind, setKind] = useState<"desktop" | "tablet" | "mobile">(
     typeof window === "undefined" ? "desktop" : classify()
@@ -40,11 +51,16 @@ export function Hero({ onSceneReady }: Props) {
   const onReady = useCallback(() => onSceneReady(), [onSceneReady]);
   const vp = useViewportKind();
 
-  // desktop: asymmetric split, graph offset right. tablet/mobile: both use
-  // the compact stacked panel (see Hero.css), just centred with different scale.
+  // desktop: asymmetric split, graph offset right, filling less of the
+  // (much wider) canvas since the left half is reserved for text. tablet/
+  // mobile: centred in their own compact panel (see Hero.css), filling it
+  // generously since nothing else shares that box. The graph sizes itself
+  // to whatever shape it actually gets (ArchitectureGraph's `fit`), so this
+  // no longer needs a hand-tuned scale per breakpoint.
   const rig: [number, number, number] =
     vp === "desktop" ? [3.0, -0.1, 0] : vp === "tablet" ? [0, 0.35, 0] : [0, 0.5, 0];
-  const rigScale = vp === "mobile" ? 0.66 : vp === "tablet" ? 0.85 : 1.05;
+  const fit =
+    vp === "desktop" ? { x: 0.46, y: 0.62 } : vp === "tablet" ? { x: 0.62, y: 0.62 } : { x: 0.72, y: 0.64 };
 
   useGSAP(
     () => {
@@ -101,7 +117,7 @@ export function Hero({ onSceneReady }: Props) {
   );
 
   return (
-    <section className="hero" id="top" ref={scope}>
+    <section className={`hero ${vp !== "desktop" ? "hero--compact" : ""}`} id="top" ref={scope}>
       <div className="hero__ambient" aria-hidden />
 
       <div className="hero__canvas" aria-hidden>
@@ -111,8 +127,8 @@ export function Hero({ onSceneReady }: Props) {
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
           <Suspense fallback={null}>
-            <group position={rig} scale={rigScale}>
-              <ArchitectureGraph onReady={onReady} labels={vp === "desktop"} />
+            <group position={rig}>
+              <ArchitectureGraph onReady={onReady} fit={fit} />
             </group>
           </Suspense>
         </Canvas>

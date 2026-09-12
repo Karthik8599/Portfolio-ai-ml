@@ -39,12 +39,29 @@ const EDGES: [string, string][] = [
 
 const NODE_MAP = new Map(NODES.map((n) => [n.id, n]));
 
-type Props = { onReady?: () => void; labels?: boolean };
+// world-space bounding size of the graph, used to auto-fit it to whatever
+// shape canvas it ends up in (see the fit-to-viewport comment in useFrame)
+const BOUNDS = (() => {
+  const xs = NODES.map((n) => n.pos[0]);
+  const ys = NODES.map((n) => n.pos[1]);
+  return {
+    width: Math.max(...xs) - Math.min(...xs),
+    height: Math.max(...ys) - Math.min(...ys),
+  };
+})();
 
-export function ArchitectureGraph({ onReady, labels = true }: Props) {
+type Props = {
+  onReady?: () => void;
+  labels?: boolean;
+  /** target fraction of the canvas's visible width/height the graph should fill */
+  fit?: { x: number; y: number };
+};
+
+export function ArchitectureGraph({ onReady, labels = true, fit = { x: 0.6, y: 0.6 } }: Props) {
   const group = useRef<THREE.Group>(null);
   const pulseRefs = useRef<THREE.Mesh[]>([]);
   const build = useRef(0);
+  const fitScale = useRef(1);
 
   useEffect(() => {
     onReady?.();
@@ -66,8 +83,20 @@ export function ArchitectureGraph({ onReady, labels = true }: Props) {
     const d = Math.min(delta, 0.05);
     build.current += (1 - build.current) * d * 1.6;
 
+    // Fit the graph to whatever shape canvas it's actually rendering into.
+    // A fixed-FOV camera reveals more horizontal space on a wide-but-short
+    // box (a phone in landscape, or just a wide hero panel) than on a
+    // squarer one, which otherwise shrinks the graph into a lost-looking
+    // cluster. Sizing off the real viewport keeps it filling the frame
+    // consistently on any screen shape.
+    const target = Math.min(
+      (state.viewport.width * fit.x) / BOUNDS.width,
+      (state.viewport.height * fit.y) / BOUNDS.height
+    );
+    fitScale.current += (target - fitScale.current) * Math.min(1, d * 6);
+
     if (group.current) {
-      const scale = 0.85 + 0.15 * build.current;
+      const scale = fitScale.current * (0.85 + 0.15 * build.current);
       group.current.scale.setScalar(scale);
 
       // slow continuous drift, plus a gentle lean toward the cursor

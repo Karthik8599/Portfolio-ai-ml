@@ -189,32 +189,47 @@
   }
 }
 
-@media (max-width: 900px) {
-  /* stack: a compact graph panel on top, content flowing cleanly below it,
-     instead of the graph sitting full-bleed behind (and colliding with)
-     the text) -- there just isn't room for the side-by-side split below
-     this width, on phones or tablets */
-  .hero {
-    display: block;
-    min-height: auto;
-    padding-top: 84px;
-    padding-bottom: 56px;
+/* stack: a compact graph panel on top, content flowing cleanly below it,
+   instead of the graph sitting full-bleed behind (and colliding with) the
+   text. Driven by the same width/height/aspect check as the 3D rig in
+   Hero.tsx (see useViewportKind) via the .hero--compact class, rather than
+   an independent media query, so the two can never disagree about which
+   layout is active -- a phone in landscape (wide but short) and an iPad in
+   portrait (wide but tall) both need this same compact treatment even
+   though only one of width/height alone would have caught them. */
+.hero--compact {
+  display: block;
+  min-height: auto;
+  padding-top: 84px;
+  padding-bottom: 56px;
+}
+.hero--compact .hero__ambient {
+  display: none;
+}
+.hero--compact .hero__canvas {
+  position: relative;
+  inset: auto;
+  height: 46vh;
+  min-height: 220px;
+  max-height: 340px;
+  margin-bottom: 4px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hero--compact .hero__veil {
+  display: none;
+}
+
+/* very short viewports (phone landscape especially): the graph panel
+   shouldn't eat most of the screen before any content is visible */
+@media (max-height: 480px) {
+  .hero--compact {
+    padding-top: 64px;
   }
-  .hero__ambient {
-    display: none;
-  }
-  .hero__canvas {
-    position: relative;
-    inset: auto;
-    height: 46vh;
-    min-height: 220px;
-    max-height: 340px;
-    margin-bottom: 4px;
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .hero__veil {
-    display: none;
+  .hero--compact .hero__canvas {
+    height: 34vh;
+    min-height: 150px;
+    max-height: 220px;
   }
 }
 
