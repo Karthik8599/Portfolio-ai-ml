@@ -13,19 +13,19 @@ type Props = { onSceneReady: () => void };
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%$&*/<>";
 const LAST = "Motamarri";
 
+// The side-by-side split only has room above ~900px; below that the hero
+// stacks (compact graph panel on top, content below, see Hero.css), so
+// "tablet" and "mobile" both need the compact treatment, just at different
+// sizes within it.
 function useViewportKind() {
+  const classify = () =>
+    window.innerWidth > 900 ? "desktop" : window.innerWidth > 640 ? "tablet" : "mobile";
+
   const [kind, setKind] = useState<"desktop" | "tablet" | "mobile">(
-    typeof window === "undefined"
-      ? "desktop"
-      : window.innerWidth > 1024
-        ? "desktop"
-        : window.innerWidth > 640
-          ? "tablet"
-          : "mobile"
+    typeof window === "undefined" ? "desktop" : classify()
   );
   useEffect(() => {
-    const on = () =>
-      setKind(window.innerWidth > 1024 ? "desktop" : window.innerWidth > 640 ? "tablet" : "mobile");
+    const on = () => setKind(classify());
     window.addEventListener("resize", on);
     return () => window.removeEventListener("resize", on);
   }, []);
@@ -40,9 +40,11 @@ export function Hero({ onSceneReady }: Props) {
   const onReady = useCallback(() => onSceneReady(), [onSceneReady]);
   const vp = useViewportKind();
 
+  // desktop: asymmetric split, graph offset right. tablet/mobile: both use
+  // the compact stacked panel (see Hero.css), just centred with different scale.
   const rig: [number, number, number] =
-    vp === "desktop" ? [3.0, -0.1, 0] : vp === "tablet" ? [1.15, 0.1, 0] : [0, 0.5, 0];
-  const rigScale = vp === "mobile" ? 0.66 : vp === "tablet" ? 0.86 : 1.05;
+    vp === "desktop" ? [3.0, -0.1, 0] : vp === "tablet" ? [0, 0.35, 0] : [0, 0.5, 0];
+  const rigScale = vp === "mobile" ? 0.66 : vp === "tablet" ? 0.85 : 1.05;
 
   useGSAP(
     () => {
@@ -110,7 +112,7 @@ export function Hero({ onSceneReady }: Props) {
         >
           <Suspense fallback={null}>
             <group position={rig} scale={rigScale}>
-              <ArchitectureGraph onReady={onReady} labels={vp !== "mobile"} />
+              <ArchitectureGraph onReady={onReady} labels={vp === "desktop"} />
             </group>
           </Suspense>
         </Canvas>

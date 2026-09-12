@@ -189,10 +189,11 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   /* stack: a compact graph panel on top, content flowing cleanly below it,
      instead of the graph sitting full-bleed behind (and colliding with)
-     the text on narrow screens */
+     the text) -- there just isn't room for the side-by-side split below
+     this width, on phones or tablets */
   .hero {
     display: block;
     min-height: auto;
@@ -207,7 +208,7 @@
     inset: auto;
     height: 46vh;
     min-height: 220px;
-    max-height: 320px;
+    max-height: 340px;
     margin-bottom: 4px;
     border-radius: var(--radius);
     overflow: hidden;
@@ -215,7 +216,9 @@
   .hero__veil {
     display: none;
   }
+}
 
+@media (max-width: 640px) {
   .hero__stats {
     flex-direction: column;
     align-items: flex-start;
